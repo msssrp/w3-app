@@ -10,10 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-web3-provider": "^1.1.2",
+    "rollup-plugin-polyfill-node": "^0.13.0",
+    "vite-plugin-node-polyfills": "^0.17.0",
     "web3": "^4.3.0",
+    "web3-core": "^4.3.2",
     "web3-utils": "^1.5.3"
   },
   "devDependencies": {
