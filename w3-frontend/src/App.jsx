@@ -12,6 +12,7 @@ const App = () => {
   const [balance, setBalance] = useState('');
   const [recipientAddress , setRecipientAddress] = useState('');
   const [amountT, setAmountT] = useState('');
+  
   useEffect(() => {
     const init = async () => {
       if (window.ethereum && isConnecting) {
@@ -23,7 +24,7 @@ const App = () => {
           const accounts = await web3Instance.eth.getAccounts();
           setAccount(accounts[0]);
 
-          const contractAddress = '0xb84114bdd69ddc5493a699a9ba80ea52544c1356';
+          const contractAddress = '0x2b36202870f7b0D82d6F7188B193E4a95743c522';
           const contract = new web3Instance.eth.Contract(FcoinContract.abi, contractAddress);
 
           setFcoinContract(contract);
@@ -55,9 +56,7 @@ const App = () => {
         console.log('Mint transaction details:', transaction);
 
         const userBalance = await fcoinContract.methods.balanceOf(account).call();
-        console.log('Updated balance after minting:', web3.utils.fromWei(userBalance, 'ether'));
-  
-
+        setBalance(web3.utils.fromWei(userBalance, 'ether'));
       } catch (error) {
         console.error('Error minting tokens:', error);
       }
@@ -74,14 +73,19 @@ const App = () => {
         console.log('Transfer details:', transaction);
   
         const userBalance = await fcoinContract.methods.balanceOf(account).call();
-        console.log('Updated balance:', web3.utils.fromWei(userBalance, 'ether'));
-  
+        setBalance(web3.utils.fromWei(userBalance, 'ether'));
       } catch (error) {
         console.error('Error transferring tokens:', error);
       }
     } else {
       console.error('Recipient address is required for the transfer.');
     }
+  };
+
+  const handleLogout = () => {
+    // Clear the account and disconnect the wallet
+    setAccount(null);
+    setBalance('');
   };
 
   return (
@@ -93,42 +97,44 @@ const App = () => {
           <p>Balance: {balance} Fcoin</p>
 
           <div className='buy'>
-          <h3>Mint Fcoin</h3>
-          <label>
-            Amount:
-            <input
-              type="text"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </label>
+            <h3>Mint Fcoin</h3>
+            <label>
+              Amount:
+              <input
+                type="text"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </label>
 
-          <button onClick={mintTokens}>Mint Tokens</button>
-           </div>
+            <button onClick={mintTokens}>Mint Tokens</button>
+          </div>
 
           <div className='buy'>
-          <h3>Transfer Fcoin</h3>
-          <div className='buy-2-label'>
-          <label>
-            Recipient Address:
-            <input
-              type="text"
-              value={recipientAddress}
-              onChange={(e) => setRecipientAddress(e.target.value)}
-            />
-          </label>
+            <h3>Transfer Fcoin</h3>
+            <div className='buy-2-label'>
+              <label>
+                Recipient Address:
+                <input
+                  type="text"
+                  value={recipientAddress}
+                  onChange={(e) => setRecipientAddress(e.target.value)}
+                />
+              </label>
 
-          <label>
-            Amount:
-            <input
-              type="text"
-              value={amountT}
-              onChange={(e) => setAmountT(e.target.value)}
-            />
-          </label>
+              <label>
+                Amount:
+                <input
+                  type="text"
+                  value={amountT}
+                  onChange={(e) => setAmountT(e.target.value)}
+                />
+              </label>
+            </div>
+            <button onClick={transferTokens}>Transfer Tokens</button>
           </div>
-          <button onClick={transferTokens}>Transfer Tokens</button>
-        </div>
+
+          <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
         <div>
