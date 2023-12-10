@@ -1,30 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.23;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
+import "@openzeppelin/contracts@5.0.0/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts@5.0.0/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts@5.0.0/token/ERC20/extensions/ERC20Pausable.sol";
+import "@openzeppelin/contracts@5.0.0/token/ERC20/extensions/ERC20Permit.sol";
 
-contract Fcoin is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit {
-    constructor(address initialOwner)
+contract Fcoin is ERC20, ERC20Burnable, ERC20Pausable, ERC20Permit {
+    constructor()
         ERC20("Fcoin", "MTK")
-        Ownable(initialOwner)
         ERC20Permit("Fcoin")
-    {
-        _mint(msg.sender, 555 * 10 ** decimals());
-    }
+    {}
 
-    function pause() public onlyOwner {
-        _pause();
-    }
-
-    function unpause() public onlyOwner {
-        _unpause();
-    }
-
-    function mint(address to, uint256 amount) public onlyOwner {
+    function mint(address to, uint256 amount) public {
         _mint(to, amount);
     }
 
